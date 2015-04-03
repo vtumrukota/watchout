@@ -11,12 +11,12 @@ gameBoard.attr('width', gameSettings.width)
          .attr('height', gameSettings.height);
 
 var x = d3.scale.linear()
-            .domain([0, 100])
-            .range([0, gameSettings.width]);
+          .domain([0, 100])
+          .range([0, gameSettings.width]);
 
 var y = d3.scale.linear()
-            .domain([0, 100])
-            .range([0, gameSettings.height]);
+          .domain([0, 100])
+          .range([0, gameSettings.height]);
 
 var Enemy = function(){
   this.size = 25;
@@ -39,12 +39,25 @@ var enemies = [];
 for(var i=0; i < gameSettings.enemyCount; i++){
   enemies.push(new Enemy());
 }
-
 gameBoard.selectAll('image').data(enemies).enter()
-            .append('image')
-            .classed('enemy', true)
-            .attr('x', function(d){return d.x;})
-            .attr('y', function(d){return d.y;})
-            .attr('xlink:href', 'asteroid.png')
-            .attr('height', function(d){return d.size;})
-            .attr('width', function(d){return d.size;});
+          .append('image')
+          .classed('enemy', true)
+          .attr('x', function(d){return d.x;})
+          .attr('y', function(d){return d.y;})
+          .attr('xlink:href', 'asteroid.png')
+          .attr('height', function(d){return d.size;})
+          .attr('width', function(d){return d.size;});
+
+var moveEnemies = function() {
+  gameBoard.selectAll('image.enemy').transition()
+          .ease('linear')
+          .duration(1300)
+          .attr('x', function(d){return getRandomPosition(d.size)})
+          .attr('y', function(d){return getRandomPosition(d.size)});
+};
+
+setInterval(moveEnemies, 1300);
+
+
+
+
