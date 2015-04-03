@@ -1,7 +1,7 @@
 // start slingin' some d3 here.
 var gameSettings = {
   enemyCount: 20,
-  width: 1000,
+  width: 1500,
   height: 1000
 };
 
@@ -19,13 +19,13 @@ var y = d3.scale.linear()
           .range([0, gameSettings.height]);
 
 var Enemy = function(){
-  this.size = 25;
+  this.size = 40;
   this.x = getRandomPosition(this.size);
   this.y = getRandomPosition(this.size);
 };
 
 var Player = function(){
-  this.size = 25;
+  this.size = 100;
   this.x = getRandomPosition(this.size);
   this.y = getRandomPosition(this.size);
 };
@@ -58,6 +58,12 @@ var moveEnemies = function() {
 
 setInterval(moveEnemies, 1300);
 
-
-
-
+var player = new Player();
+gameBoard.selectAll('image.player').data([player]).enter()
+          .append('image')
+          .classed('player', true)
+          .attr('x', function(d){return d.x;})
+          .attr('y', function(d){return d.y;})
+          .attr('xlink:href', 'rocketship.png')
+          .attr('height', function(d){return d.size;})
+          .attr('width', function(d){return d.size;});
