@@ -6,12 +6,14 @@ body {
   color: white;
   border: 2px solid white;
   padding: 8px;
-  width: 25%;
+  width: 280px;
+}
+.scoreboard span{
+  float: right;
 }
 svg {
   background-image: url('space-wallpaper.jpg');
 }
-
 @-webkit-keyframes rotateIn {
   0% {
     -webkit-transform-origin: center center;
