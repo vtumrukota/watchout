@@ -1,6 +1,6 @@
 // start slingin' some d3 here.
 var gameSettings = {
-  enemyCount: 10,
+  enemyCount: 20,
   width: 1200,
   height: 800
 };
