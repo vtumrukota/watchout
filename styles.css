@@ -4,7 +4,8 @@
 Feel free to use it if you like. */
 
 body {
-  background-color: #666;
+  background-color: black;
+
 }
 .scoreboard {
   color: white;
@@ -12,5 +13,5 @@ body {
   width: 15%;
 }
 svg {
-  background-color: black;
+  background-image: url('http://cdn.wonderfulengineering.com/wp-content/uploads/2014/04/space-wallpapers-13.jpg');
 }

@@ -1,7 +1,7 @@
 // start slingin' some d3 here.
 var gameSettings = {
   enemyCount: 20,
-  width: 1000,
+  width: 1200,
   height: 800
 };
 
@@ -26,12 +26,12 @@ var Enemy = function(){
 
 var Player = function(){
   this.size = 120;
-  this.x = getRandomPosition(this.size, gameSettings.width);
-  this.y = getRandomPosition(this.size, gameSettings.height);
+  this.x = gameSettings.width / 2 - this.size / 2;
+  this.y = gameSettings.height / 2 - this.size / 2;
 };
 
 var getRandomPosition = function(size, limit) {
-  return size + (Math.random() * (limit - size));
+  return Math.random() * (limit - size);
 };
 
 var enemies = [];
@@ -81,3 +81,44 @@ var player = gameBoard.selectAll('image.player')
                 .attr('height', function(d){ return d.size; })
                 .attr('width', function(d){ return d.size; })
                 .call(drag);
+
+
+//collisionCheck
+var collisionCheck = function(enemy, collideCB){
+  //iterate through enemy array
+  for(var i=0; i < enemies.length; i++){
+    var enemyCoords = enemies[i].x
+  }
+    //grab enemy x,y coords
+    //grab player x,y coords
+      //if coords intersect player x,y
+
+        //increment collision counter
+        //if currScore > HighScore, change them
+        //reset currScore to 0
+        gameStats.currScore = 0;
+}
+
+
+
+
+//ScoreBoard Functionality
+var scoreBoard = d3.select('.scoreboard');
+var gameStats = {
+  currScore: 0,
+  highScore: 0,
+  collisions: 0
+};
+
+setInterval(function(){
+  gameStats.currScore += 10;
+  scoreBoard.select('.current span').text(gameStats.currScore);
+}, 50);
+
+
+
+
+
+
+
+
