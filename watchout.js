@@ -109,11 +109,13 @@ var gameStats = {
   highScore: 0,
   collisions: 0
 };
-
-setInterval(function(){
-  gameStats.currScore += 10;
-  scoreBoard.select('.current span').text(gameStats.currScore);
-}, 50);
+//wait until enemies move to start increasing score
+setTimeout(function() {
+  setInterval(function(){
+    gameStats.currScore += 10;
+    scoreBoard.select('.current span').text(gameStats.currScore);
+  }, 100);},
+  1500);
 
 
 
