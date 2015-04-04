@@ -15,6 +15,7 @@ var Enemy = function(){
   this.size = 40;
   this.x = getRandomPosition(this.size, gameSettings.width);
   this.y = getRandomPosition(this.size, gameSettings.height);
+  this.collision = false;
 };
 
 var Player = function(){
@@ -79,12 +80,17 @@ var checkCollision = function(enemy, callback) {
   var distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
   if (distance < sumOfRadii) {
+    enemy.collision = true;
     callback();
+  } else {
+    if (enemy.collision) {
+      gameStats.collisions++;
+      enemy.collision = false;
+    }
   }
 };
 
 var onCollision = function() {
-  gameStats.collisions++;
   if(gameStats.currScore > gameStats.highScore){
     gameStats.highScore = gameStats.currScore;
     d3.select('.high span').text(gameStats.highScore);
