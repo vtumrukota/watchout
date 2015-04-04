@@ -1,8 +1,13 @@
-// start slingin' some d3 here.
 var gameSettings = {
   enemyCount: 20,
   width: 1200,
   height: 800
+};
+
+var gameStats = {
+  currScore: 0,
+  highScore: 0,
+  collisions: 0
 };
 
 var gameBoard = d3.select('body').append('svg');
@@ -89,10 +94,6 @@ var checkCollision = function(enemy, callback) {
 };
 
 var onCollision = function() {
-  if(gameStats.currScore > gameStats.highScore){
-    gameStats.highScore = gameStats.currScore;
-    d3.select('.high span').text(gameStats.highScore);
-  }
   gameStats.currScore = 0;
 };
 
@@ -147,16 +148,15 @@ gameBoard.selectAll('image.player')
 
 //ScoreBoard Functionality
 var scoreBoard = d3.select('.scoreboard');
-var gameStats = {
-  currScore: 0,
-  highScore: 0,
-  collisions: 0
-};
 
 //wait until enemies move to start increasing score
 setTimeout(function() {
   setInterval(function() {
     gameStats.currScore += 10;
+    if (gameStats.currScore > gameStats.highScore) {
+      gameStats.highScore = gameStats.currScore;
+    }
+    scoreBoard.select('.high span').text(gameStats.highScore);
     scoreBoard.select('.current span').text(gameStats.currScore);
     scoreBoard.select('.collisions span').text(gameStats.collisions);
   }, 100);
