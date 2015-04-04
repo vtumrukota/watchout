@@ -1,6 +1,6 @@
 // start slingin' some d3 here.
 var gameSettings = {
-  enemyCount: 20,
+  enemyCount: 10,
   width: 1200,
   height: 800
 };
@@ -9,6 +9,7 @@ var gameBoard = d3.select('body').append('svg');
 
 gameBoard.attr('width', gameSettings.width)
          .attr('height', gameSettings.height);
+
 
 var Enemy = function(){
   this.size = 40;
@@ -48,24 +49,20 @@ var moveEnemies = function() {
     .data(enemies)
     .transition()
       .duration(1500)
-      .attr('x', function(d){ return d.x; })
-      .attr('y', function(d){ return d.y; })
       .tween('moveEnemy', function(d) {
+        var startX = d.x;
+        var startY = d.y;
+        var endX = getRandomPosition(d.size, gameSettings.width);
+        var endY = getRandomPosition(d.size, gameSettings.height);
+        var enemy = d3.select(this);
         return function(t) {
           checkCollision(d, onCollision);
-          d.x = getRandomPosition(d.size, gameSettings.width) * t;
-          d.y = getRandomPosition(d.size, gameSettings.height) * t;
+          d.x = startX + (endX - startX)*t;
+          d.y = startY + (endY - startY)*t;
+          enemy.attr('x', d.x).attr('y', d.y);
         };
       });
 };
-
-// var moveEnemies = function() {
-//   gameBoard.selectAll('image.enemy').transition()
-//           .ease('linear')
-//           .duration(1500)
-//           .attr('x', function(d){return getRandomPosition(d.size, gameSettings.width);})
-//           .attr('y', function(d){return getRandomPosition(d.size, gameSettings.height);});
-// };
 
 var checkCollision = function(enemy, callback) {
   var player = d3.selectAll('.player');
@@ -76,7 +73,7 @@ var checkCollision = function(enemy, callback) {
   var enemyCX = enemy.x / 2;
   var enemyCY = enemy.y / 2;
 
-  var sumOfRadii = enemy.size / 2 + 120 / 2;
+  var sumOfRadii = (enemy.size / 2) + 60 ; //60 refers to radius of player
   var diffX = enemyCX - playerCX;
   var diffY = enemyCY - playerCY;
   var distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
