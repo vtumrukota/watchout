@@ -10,14 +10,6 @@ var gameBoard = d3.select('body').append('svg');
 gameBoard.attr('width', gameSettings.width)
          .attr('height', gameSettings.height);
 
-var x = d3.scale.linear()
-          .domain([0, 100])
-          .range([0, gameSettings.width]);
-
-var y = d3.scale.linear()
-          .domain([0, 100])
-          .range([0, gameSettings.height]);
-
 var Enemy = function(){
   this.size = 40;
   this.x = getRandomPosition(this.size, gameSettings.width);
@@ -36,9 +28,10 @@ var getRandomPosition = function(size, limit) {
 
 var enemies = [];
 //Place enemies in the game window
-for(var i=0; i < gameSettings.enemyCount; i++){
+for (var i = 0; i < gameSettings.enemyCount; i++) {
   enemies.push(new Enemy());
 }
+
 gameBoard.selectAll('image')
   .data(enemies)
   .enter()
@@ -108,8 +101,9 @@ var drag = d3.behavior.drag()
                 };
               })
               .on('drag', function(){
-                d3.select(this).attr('x', d3.event.x)
-                                .attr('y', d3.event.y);
+                d3.select(this)
+                  .attr('x', d3.event.x)
+                  .attr('y', d3.event.y);
               });
 
 var player = gameBoard.selectAll('image.player')
