@@ -65,15 +65,14 @@ var moveEnemies = function() {
 };
 
 var checkCollision = function(enemy, callback) {
-  var player = d3.selectAll('.player');
-  var playerX = player.attr('x');
-  var playerY = player.attr('y');
+  var playerX = player.x;
+  var playerY = player.y;
   var playerCX = playerX / 2;
   var playerCY = playerY / 2;
   var enemyCX = enemy.x / 2;
   var enemyCY = enemy.y / 2;
 
-  var sumOfRadii = (enemy.size / 2) + 60 ; //60 refers to radius of player
+  var sumOfRadii = (enemy.size / 2) + player.size / 2;
   var diffX = enemyCX - playerCX;
   var diffY = enemyCY - playerCY;
   var distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
@@ -132,17 +131,18 @@ var drag = d3.behavior.drag()
                   });
               });
 
-var player = gameBoard.selectAll('image.player')
-              .data([new Player()])
-              .enter()
-              .append('image')
-              .classed('player', true)
-              .attr('x', function(d){ return d.x; })
-              .attr('y', function(d){ return d.y; })
-              .attr('xlink:href', 'rocketship.png')
-              .attr('height', function(d){ return d.size; })
-              .attr('width', function(d){ return d.size; })
-              .call(drag);
+var player = new Player();
+gameBoard.selectAll('image.player')
+  .data([player])
+  .enter()
+  .append('image')
+  .classed('player', true)
+  .attr('x', function(d){ return d.x; })
+  .attr('y', function(d){ return d.y; })
+  .attr('xlink:href', 'rocketship.png')
+  .attr('height', function(d){ return d.size; })
+  .attr('width', function(d){ return d.size; })
+  .call(drag);
 
 
 //ScoreBoard Functionality
