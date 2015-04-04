@@ -1,18 +1,47 @@
 body {
   background-color: black;
 }
+.title {
+  margin: 0 auto;
+}
+h1{
+  font-family: 'Arial';
+  color: white;
+  font-size: 2.5em;
+  /*display: inline-block;*/
+  text-align: center;
+  margin: 0 auto;
+}
+.collide {
+  background-color: red;
+}
 .scoreboard {
+  background-color: black;
   font-size: 1.5em;
   color: white;
   border: 2px solid white;
   padding: 8px;
   width: 280px;
+  margin: 10px auto;
 }
 .scoreboard span{
   float: right;
 }
+.high{
+  color: #44FF44;
+}
+.current {
+  color: #9999FF;
+}
+.collisions{
+  color: red;
+}
+
+
 svg {
   background-image: url('space-wallpaper.jpg');
+  display: block;
+  margin: 0 auto;
 }
 @-webkit-keyframes rotateIn {
   0% {

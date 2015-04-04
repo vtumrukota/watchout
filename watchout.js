@@ -1,7 +1,7 @@
 var gameSettings = {
   enemyCount: 20,
-  width: 1200,
-  height: 800
+  width: 900,
+  height: 750
 };
 
 var gameStats = {
@@ -23,7 +23,7 @@ var Enemy = function(){
 };
 
 var Player = function(){
-  this.size = 120;
+  this.size = 100;
   this.x = gameSettings.width / 2 - this.size / 2;
   this.y = gameSettings.height / 2 - this.size / 2;
 };
@@ -89,12 +89,16 @@ var checkCollision = function(enemy, callback) {
     if (enemy.collision) {
       gameStats.collisions++;
       enemy.collision = false;
+      d3.select('body').classed('collide', false);
     }
   }
 };
 
 var onCollision = function() {
+  d3.select('body').classed('collide', true);
   gameStats.currScore = 0;
+  scoreBoard.select('.current span').text(gameStats.currScore);
+
 };
 
 setInterval(moveEnemies, 1500);
