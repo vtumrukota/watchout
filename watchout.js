@@ -44,11 +44,11 @@ gameBoard.selectAll('image')
   .enter()
   .append('image')
   .classed('enemy', true)
-  // .attr('x', function(d){return d.x;})
-  // .attr('y', function(d){return d.y;})
+  .attr('x', function(d){ return d.x; })
+  .attr('y', function(d){ return d.y; })
   .attr('xlink:href', 'asteroid.png')
-  .attr('height', function(d){return d.size;})
-  .attr('width', function(d){return d.size;});
+  .attr('height', function(d){ return d.size; })
+  .attr('width', function(d){ return d.size; });
 
 var moveEnemies = function() {
   gameBoard.selectAll('image.enemy')
@@ -60,8 +60,8 @@ var moveEnemies = function() {
       .tween('moveEnemy', function(d) {
         return function(t) {
           checkCollision(d, onCollision);
-          d.x = getRandomPosition(d.size, gameSettings.width)*t;
-          d.y = getRandomPosition(d.size, gameSettings.height)*t;
+          d.x = getRandomPosition(d.size, gameSettings.width) * t;
+          d.y = getRandomPosition(d.size, gameSettings.height) * t;
         };
       });
 };
@@ -84,7 +84,7 @@ var checkCollision = function(enemy, callback) {
   var enemyCY = enemy.y / 2;
 
   var sumOfRadii = enemy.size / 2 + 120 / 2;
-  var diffX = enemyCX - playerCY;
+  var diffX = enemyCX - playerCX;
   var diffY = enemyCY - playerCY;
   var distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
