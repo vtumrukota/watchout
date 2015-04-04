@@ -1,8 +1,8 @@
 // start slingin' some d3 here.
 var gameSettings = {
   enemyCount: 20,
-  width: 1500,
-  height: 1000
+  width: 1000,
+  height: 800
 };
 
 var gameBoard = d3.select('body').append('svg');
@@ -20,18 +20,18 @@ var y = d3.scale.linear()
 
 var Enemy = function(){
   this.size = 40;
-  this.x = getRandomPosition(this.size);
-  this.y = getRandomPosition(this.size);
+  this.x = getRandomPosition(this.size, gameSettings.width);
+  this.y = getRandomPosition(this.size, gameSettings.height);
 };
 
 var Player = function(){
-  this.size = 100;
-  this.x = getRandomPosition(this.size);
-  this.y = getRandomPosition(this.size);
+  this.size = 120;
+  this.x = getRandomPosition(this.size, gameSettings.width);
+  this.y = getRandomPosition(this.size, gameSettings.height);
 };
 
-var getRandomPosition = function(size) {
-  return size + (Math.random() * (gameSettings.width - size));
+var getRandomPosition = function(size, limit) {
+  return size + (Math.random() * (limit - size));
 };
 
 var enemies = [];
@@ -51,19 +51,33 @@ gameBoard.selectAll('image').data(enemies).enter()
 var moveEnemies = function() {
   gameBoard.selectAll('image.enemy').transition()
           .ease('linear')
-          .duration(1300)
-          .attr('x', function(d){return getRandomPosition(d.size)})
-          .attr('y', function(d){return getRandomPosition(d.size)});
+          .duration(1500)
+          .attr('x', function(d){return getRandomPosition(d.size, gameSettings.width);})
+          .attr('y', function(d){return getRandomPosition(d.size, gameSettings.height);});
 };
 
-setInterval(moveEnemies, 1300);
+setInterval(moveEnemies, 1500);
 
-var player = new Player();
-gameBoard.selectAll('image.player').data([player]).enter()
-          .append('image')
-          .classed('player', true)
-          .attr('x', function(d){return d.x;})
-          .attr('y', function(d){return d.y;})
-          .attr('xlink:href', 'rocketship.png')
-          .attr('height', function(d){return d.size;})
-          .attr('width', function(d){return d.size;});
+var drag = d3.behavior.drag()
+              .origin(function() {
+                return {
+                  x: d3.select(this).attr('x'),
+                  y: d3.select(this).attr('y')
+                };
+              })
+              .on('drag', function(){
+                d3.select(this).attr('x', d3.event.x)
+                                .attr('y', d3.event.y);
+              });
+
+var player = gameBoard.selectAll('image.player')
+                .data([new Player()])
+                .enter()
+                .append('image')
+                .classed('player', true)
+                .attr('x', function(d){ return d.x; })
+                .attr('y', function(d){ return d.y; })
+                .attr('xlink:href', 'rocketship.png')
+                .attr('height', function(d){ return d.size; })
+                .attr('width', function(d){ return d.size; })
+                .call(drag);
