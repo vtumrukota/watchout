@@ -84,8 +84,12 @@ var checkCollision = function(enemy, callback) {
 };
 
 var onCollision = function() {
-  gameStats.currScore = 0;
   gameStats.collisions++;
+  if(gameStats.currScore > gameStats.highScore){
+    gameStats.highScore = gameStats.currScore;
+    d3.select('.high span').text(gameStats.highScore);
+  }
+  gameStats.currScore = 0;
 };
 
 setInterval(moveEnemies, 1500);
