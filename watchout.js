@@ -39,21 +39,63 @@ var enemies = [];
 for(var i=0; i < gameSettings.enemyCount; i++){
   enemies.push(new Enemy());
 }
-gameBoard.selectAll('image').data(enemies).enter()
-          .append('image')
-          .classed('enemy', true)
-          .attr('x', function(d){return d.x;})
-          .attr('y', function(d){return d.y;})
-          .attr('xlink:href', 'asteroid.png')
-          .attr('height', function(d){return d.size;})
-          .attr('width', function(d){return d.size;});
+gameBoard.selectAll('image')
+  .data(enemies)
+  .enter()
+  .append('image')
+  .classed('enemy', true)
+  // .attr('x', function(d){return d.x;})
+  // .attr('y', function(d){return d.y;})
+  .attr('xlink:href', 'asteroid.png')
+  .attr('height', function(d){return d.size;})
+  .attr('width', function(d){return d.size;});
 
 var moveEnemies = function() {
-  gameBoard.selectAll('image.enemy').transition()
-          .ease('linear')
-          .duration(1500)
-          .attr('x', function(d){return getRandomPosition(d.size, gameSettings.width);})
-          .attr('y', function(d){return getRandomPosition(d.size, gameSettings.height);});
+  gameBoard.selectAll('image.enemy')
+    .data(enemies)
+    .transition()
+      .duration(1500)
+      .attr('x', function(d){ return d.x; })
+      .attr('y', function(d){ return d.y; })
+      .tween('moveEnemy', function(d) {
+        return function(t) {
+          checkCollision(d, onCollision);
+          d.x = getRandomPosition(d.size, gameSettings.width)*t;
+          d.y = getRandomPosition(d.size, gameSettings.height)*t;
+        };
+      });
+};
+
+// var moveEnemies = function() {
+//   gameBoard.selectAll('image.enemy').transition()
+//           .ease('linear')
+//           .duration(1500)
+//           .attr('x', function(d){return getRandomPosition(d.size, gameSettings.width);})
+//           .attr('y', function(d){return getRandomPosition(d.size, gameSettings.height);});
+// };
+
+var checkCollision = function(enemy, callback) {
+  var player = d3.selectAll('.player');
+  var playerX = player.attr('x');
+  var playerY = player.attr('y');
+  var playerCX = playerX / 2;
+  var playerCY = playerY / 2;
+  var enemyCX = enemy.x / 2;
+  var enemyCY = enemy.y / 2;
+
+  var sumOfRadii = enemy.size / 2 + 120 / 2;
+  var diffX = enemyCX - playerCY;
+  var diffY = enemyCY - playerCY;
+  var distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+
+  if (distance < sumOfRadii) {
+    callback();
+  }
+};
+
+var onCollision = function() {
+  gameStats.currScore = 0;
+  gameStats.collisions++;
 };
 
 setInterval(moveEnemies, 1500);
@@ -71,35 +113,16 @@ var drag = d3.behavior.drag()
               });
 
 var player = gameBoard.selectAll('image.player')
-                .data([new Player()])
-                .enter()
-                .append('image')
-                .classed('player', true)
-                .attr('x', function(d){ return d.x; })
-                .attr('y', function(d){ return d.y; })
-                .attr('xlink:href', 'rocketship.png')
-                .attr('height', function(d){ return d.size; })
-                .attr('width', function(d){ return d.size; })
-                .call(drag);
-
-
-//collisionCheck
-var collisionCheck = function(enemy, collideCB){
-  //iterate through enemy array
-  for(var i=0; i < enemies.length; i++){
-    var enemyCoords = enemies[i].x
-  }
-    //grab enemy x,y coords
-    //grab player x,y coords
-      //if coords intersect player x,y
-
-        //increment collision counter
-        //if currScore > HighScore, change them
-        //reset currScore to 0
-        gameStats.currScore = 0;
-}
-
-
+              .data([new Player()])
+              .enter()
+              .append('image')
+              .classed('player', true)
+              .attr('x', function(d){ return d.x; })
+              .attr('y', function(d){ return d.y; })
+              .attr('xlink:href', 'rocketship.png')
+              .attr('height', function(d){ return d.size; })
+              .attr('width', function(d){ return d.size; })
+              .call(drag);
 
 
 //ScoreBoard Functionality
@@ -109,18 +132,12 @@ var gameStats = {
   highScore: 0,
   collisions: 0
 };
+
 //wait until enemies move to start increasing score
 setTimeout(function() {
-  setInterval(function(){
+  setInterval(function() {
     gameStats.currScore += 10;
     scoreBoard.select('.current span').text(gameStats.currScore);
-  }, 100);},
-  1500);
-
-
-
-
-
-
-
-
+    scoreBoard.select('.collisions span').text(gameStats.collisions);
+  }, 100);
+}, 1500);

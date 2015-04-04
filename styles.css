@@ -8,9 +8,11 @@ body {
 
 }
 .scoreboard {
+  font-size: 1.5em;
   color: white;
   border: 2px solid white;
-  width: 15%;
+  padding: 8px;
+  width: 17%;
 }
 svg {
   background-image: url('http://cdn.wonderfulengineering.com/wp-content/uploads/2014/04/space-wallpapers-13.jpg');
